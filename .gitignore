@@ -1,0 +1,43 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE and editor metadata
+.idea/
+.vscode/
+*.iml
+
+# Environment and local secrets
+.env
+.env.*
+!.env.example
+*.local
+application-local.yml
+application-*.local.yml
+
+# Java / Maven build output
+target/
+**/target/
+.mvn/timing.properties
+
+# Node / Vite build output
+node_modules/
+**/node_modules/
+dist/
+**/dist/
+.vite/
+coverage/
+
+# Runtime data and logs
+var/
+data/*.db
+data/*.trace.db
+poc/server/data/
+poc/server/workspaces/
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
