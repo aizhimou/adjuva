@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:adjuva-test;DATABASE_TO_UPPER=false;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+db-scheduler:
+  enabled: false
+
+adjuva:
+  executor:
+    enabled: false
+  mock:
+    wait-timeout-seconds: 1

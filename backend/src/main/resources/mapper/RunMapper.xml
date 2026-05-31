@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.adjuva.backend.mapper.RunMapper">
+    <select id="selectByConversation" resultType="com.adjuva.backend.model.entity.Run">
+        SELECT id, conversation_id, provider_session_id, trigger_message_id, trigger_type,
+               provider, model, lifecycle, termination_reason, process_id,
+               external_session_id_before, external_session_id_after, started_at, ended_at,
+               exit_code, signal, final_event_type, timeout_kind, error_message, prompt,
+               command_line, metadata_json, created_at, updated_at
+        FROM runs
+        WHERE conversation_id = #{conversationId}
+        ORDER BY started_at ASC, id ASC
+    </select>
+
+    <select id="selectRunningByConversation" resultType="com.adjuva.backend.model.entity.Run">
+        SELECT id, conversation_id, provider_session_id, trigger_message_id, trigger_type,
+               provider, model, lifecycle, termination_reason, process_id,
+               external_session_id_before, external_session_id_after, started_at, ended_at,
+               exit_code, signal, final_event_type, timeout_kind, error_message, prompt,
+               command_line, metadata_json, created_at, updated_at
+        FROM runs
+        WHERE conversation_id = #{conversationId}
+          AND lifecycle = 'running'
+        ORDER BY started_at DESC
+        LIMIT 1
+    </select>
+
+    <update id="markProcessStarted">
+        UPDATE runs
+        SET process_id = #{processId},
+            command_line = #{commandLine},
+            updated_at = #{updatedAt}
+        WHERE id = #{id}
+          AND lifecycle = 'running'
+    </update>
+
+    <update id="updateExternalSession">
+        UPDATE runs
+        SET external_session_id_after = #{externalSessionIdAfter},
+            updated_at = #{updatedAt}
+        WHERE id = #{id}
+          AND lifecycle = 'running'
+    </update>
+
+    <update id="endRun">
+        UPDATE runs
+        SET lifecycle = 'ended',
+            termination_reason = #{terminationReason},
+            exit_code = #{exitCode},
+            signal = #{signal},
+            final_event_type = #{finalEventType},
+            timeout_kind = #{timeoutKind},
+            error_message = #{errorMessage},
+            ended_at = #{endedAt},
+            updated_at = #{updatedAt}
+        WHERE id = #{id}
+          AND lifecycle = 'running'
+    </update>
+</mapper>

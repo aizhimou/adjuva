@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.adjuva.backend.mapper.ProjectMapper">
+    <select id="selectActiveProjects" resultType="com.adjuva.backend.model.entity.Project">
+        SELECT
+            id,
+            name,
+            slug,
+            description,
+            status,
+            workspace_path,
+            default_provider,
+            default_model,
+            created_at,
+            updated_at
+        FROM projects
+        WHERE status = 'active'
+        ORDER BY created_at DESC
+    </select>
+
+    <select id="selectActiveBySlug" resultType="com.adjuva.backend.model.entity.Project">
+        SELECT
+            id,
+            name,
+            slug,
+            description,
+            status,
+            workspace_path,
+            default_provider,
+            default_model,
+            created_at,
+            updated_at
+        FROM projects
+        WHERE slug = #{slug}
+          AND status = 'active'
+    </select>
+</mapper>

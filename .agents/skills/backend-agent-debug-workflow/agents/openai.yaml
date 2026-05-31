@@ -1,0 +1,7 @@
+interface:
+  display_name: "Adjuva Backend Debug"
+  short_description: "Run backend runtime debug scenarios"
+  default_prompt: "Use $backend-agent-debug-workflow to start the local Adjuva backend, call APIs, verify H2 database state and logs, fix issues, rerun the scenario, and summarize the evidence."
+
+policy:
+  allow_implicit_invocation: true
