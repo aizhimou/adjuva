@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.adjuva.backend.mapper.RunMapper">
-    <select id="selectByConversation" resultType="com.adjuva.backend.model.entity.Run">
+<mapper namespace="dev.adjuva.mapper.RunMapper">
+    <select id="selectByConversation" resultType="dev.adjuva.model.entity.Run">
         SELECT id, conversation_id, provider_session_id, trigger_message_id, trigger_type,
                provider, model, lifecycle, termination_reason, process_id,
                external_session_id_before, external_session_id_after, started_at, ended_at,
@@ -12,7 +12,7 @@
         ORDER BY started_at ASC, id ASC
     </select>
 
-    <select id="selectRunningByConversation" resultType="com.adjuva.backend.model.entity.Run">
+    <select id="selectRunningByConversation" resultType="dev.adjuva.model.entity.Run">
         SELECT id, conversation_id, provider_session_id, trigger_message_id, trigger_type,
                provider, model, lifecycle, termination_reason, process_id,
                external_session_id_before, external_session_id_after, started_at, ended_at,

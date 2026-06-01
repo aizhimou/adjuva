@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.adjuva.backend.mapper.MailboxMessageMapper">
-    <select id="selectByConversation" resultType="com.adjuva.backend.model.entity.MailboxMessage">
+<mapper namespace="dev.adjuva.mapper.MailboxMessageMapper">
+    <select id="selectByConversation" resultType="dev.adjuva.model.entity.MailboxMessage">
         SELECT id, conversation_id, mailbox_id, run_id, sender, message_type, body,
                reply_to_message_id, metadata_json, read_at, ack_at, created_at, updated_at
         FROM mailbox_messages
@@ -9,7 +9,7 @@
         ORDER BY created_at ASC, id ASC
     </select>
 
-    <select id="selectAfter" resultType="com.adjuva.backend.model.entity.MailboxMessage">
+    <select id="selectAfter" resultType="dev.adjuva.model.entity.MailboxMessage">
         SELECT id, conversation_id, mailbox_id, run_id, sender, message_type, body,
                reply_to_message_id, metadata_json, read_at, ack_at, created_at, updated_at
         FROM mailbox_messages
@@ -20,7 +20,7 @@
         ORDER BY created_at ASC, id ASC
     </select>
 
-    <select id="selectOwned" resultType="com.adjuva.backend.model.entity.MailboxMessage">
+    <select id="selectOwned" resultType="dev.adjuva.model.entity.MailboxMessage">
         SELECT id, conversation_id, mailbox_id, run_id, sender, message_type, body,
                reply_to_message_id, metadata_json, read_at, ack_at, created_at, updated_at
         FROM mailbox_messages

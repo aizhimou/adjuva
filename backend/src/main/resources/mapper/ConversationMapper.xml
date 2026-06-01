@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.adjuva.backend.mapper.ConversationMapper">
-    <select id="selectByProject" resultType="com.adjuva.backend.model.entity.Conversation">
+<mapper namespace="dev.adjuva.mapper.ConversationMapper">
+    <select id="selectByProject" resultType="dev.adjuva.model.entity.Conversation">
         SELECT id, project_id, title, source_type, source_ref, status, mailbox_id,
                workspace_path, default_provider, default_model, active_run_id,
                pending_question_message_id, last_activity_at, created_at, updated_at
@@ -10,7 +10,7 @@
         ORDER BY last_activity_at DESC
     </select>
 
-    <select id="selectSummaries" resultType="com.adjuva.backend.model.response.ConversationSummary">
+    <select id="selectSummaries" resultType="dev.adjuva.model.response.ConversationSummary">
         SELECT
             c.id,
             c.project_id AS project_id,
@@ -28,7 +28,7 @@
         ORDER BY c.last_activity_at DESC, c.created_at DESC, c.id DESC
     </select>
 
-    <select id="selectForDetail" resultType="com.adjuva.backend.model.entity.Conversation">
+    <select id="selectForDetail" resultType="dev.adjuva.model.entity.Conversation">
         SELECT id, project_id, title, source_type, source_ref, status, mailbox_id,
                workspace_path, default_provider, default_model, active_run_id,
                pending_question_message_id, last_activity_at, created_at, updated_at

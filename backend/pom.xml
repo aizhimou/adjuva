@@ -11,7 +11,7 @@
         <relativePath/>
     </parent>
 
-    <groupId>com.adjuva</groupId>
+    <groupId>dev.adjuva</groupId>
     <artifactId>adjuva-backend</artifactId>
     <version>0.1.0-SNAPSHOT</version>
     <name>adjuva-backend</name>

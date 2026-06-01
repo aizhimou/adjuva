@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.adjuva.backend.mapper.OutboxEventMapper">
-    <select id="selectPendingAfter" resultType="com.adjuva.backend.model.entity.OutboxEvent">
+<mapper namespace="dev.adjuva.mapper.OutboxEventMapper">
+    <select id="selectPendingAfter" resultType="dev.adjuva.model.entity.OutboxEvent">
         SELECT id, aggregate_type, aggregate_id, event_type, payload_json, status,
                attempts, available_at, published_at, error_message, created_at, updated_at
         FROM outbox_events
