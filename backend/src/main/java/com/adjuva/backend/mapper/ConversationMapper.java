@@ -2,6 +2,7 @@ package com.adjuva.backend.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.adjuva.backend.model.entity.Conversation;
+import com.adjuva.backend.model.response.ConversationSummary;
 
 import java.time.Instant;
 import java.util.List;
@@ -10,6 +11,8 @@ import java.util.Optional;
 public interface ConversationMapper extends BaseMapper<Conversation> {
 
     List<Conversation> selectByProject(String projectId);
+
+    List<ConversationSummary> selectSummaries();
 
     Optional<Conversation> selectForDetail(String id);
 

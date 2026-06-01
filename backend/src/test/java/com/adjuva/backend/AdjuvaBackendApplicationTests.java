@@ -224,6 +224,50 @@ class AdjuvaBackendApplicationTests {
     }
 
     @Test
+    void globalConversationSummaryApiReturnsBackendSortedProjectContext() throws Exception {
+        HttpClient client = HttpClient.newHttpClient();
+        Project project = createProject("summary", "mock", "mock-agent");
+        Conversation older = conversationService.create(project.getId(), new CreateConversationRequest(
+                "Older", null, null, null, null, null));
+        Thread.sleep(5);
+        Conversation newer = conversationService.create(project.getId(), new CreateConversationRequest(
+                "Newer", null, null, null, null, null));
+
+        HttpResponse<String> response = client.send(get("/api/v1/conversations"), HttpResponse.BodyHandlers.ofString());
+
+        assertThat(response.statusCode()).isEqualTo(200);
+        JsonNode conversations = objectMapper.readTree(response.body());
+        JsonNode newerSummary = findById(conversations, newer.getId());
+        JsonNode olderSummary = findById(conversations, older.getId());
+        assertThat(newerSummary.path("projectId").asText()).isEqualTo(project.getId());
+        assertThat(newerSummary.path("projectName").asText()).isEqualTo(project.getName());
+        assertThat(newerSummary.path("projectSlug").asText()).isEqualTo(project.getSlug());
+        assertThat(newerSummary.path("title").asText()).isEqualTo("Newer");
+        assertThat(newerSummary.path("status").asText()).isEqualTo("idle");
+        assertThat(newerSummary.path("lastActivityAt").asText()).isNotBlank();
+        assertThat(newerSummary.path("updatedAt").asText()).isNotBlank();
+        assertThat(indexOf(conversations, newer.getId())).isLessThan(indexOf(conversations, older.getId()));
+        assertThat(olderSummary.path("title").asText()).isEqualTo("Older");
+    }
+
+    @Test
+    void eventsApiStreamsOutboxSignals() throws Exception {
+        HttpClient client = HttpClient.newHttpClient();
+        Project project = createProject("events", "mock", "mock-agent");
+        Conversation conversation = conversationService.create(project.getId(), new CreateConversationRequest(
+                "Events", null, null, null, null, null));
+
+        HttpResponse<String> response = client.send(get("/api/v1/events"), HttpResponse.BodyHandlers.ofString());
+
+        assertThat(response.statusCode()).isEqualTo(200);
+        assertThat(response.headers().firstValue("content-type").orElse(""))
+                .contains("text/event-stream");
+        assertThat(response.body()).contains("event:conversation.created");
+        assertThat(response.body()).contains("\"aggregateType\":\"conversation\"");
+        assertThat(response.body()).contains("\"aggregateId\":\"" + conversation.getId() + "\"");
+    }
+
+    @Test
     void mockExecutorCompletesAskWaitDoneFlow() throws Exception {
         Conversation conversation = createConversation("mock-executor");
         Run run = conversationService.sendUserMessage(
@@ -319,6 +363,32 @@ class AdjuvaBackendApplicationTests {
                 .header("content-type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(body))
                 .build();
+    }
+
+    private HttpRequest get(String path) {
+        return HttpRequest.newBuilder(URI.create("http://localhost:" + port + path))
+                .GET()
+                .build();
+    }
+
+    private JsonNode findById(JsonNode array, String id) {
+        for (JsonNode node : array) {
+            if (id.equals(node.path("id").asText())) {
+                return node;
+            }
+        }
+        throw new AssertionError("Could not find id " + id + " in " + array);
+    }
+
+    private int indexOf(JsonNode array, String id) {
+        int index = 0;
+        for (JsonNode node : array) {
+            if (id.equals(node.path("id").asText())) {
+                return index;
+            }
+            index++;
+        }
+        throw new AssertionError("Could not find id " + id + " in " + array);
     }
 
     private Conversation createConversation(String name) {

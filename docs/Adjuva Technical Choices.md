@@ -319,7 +319,7 @@ Modular Monolith
 Frontend 暂定使用：
 
 ```text
-Mobile-only PWA
+Responsive Web App / PWA
 +
 Vite
 +
@@ -327,7 +327,7 @@ React
 +
 JavaScript
 +
-Ionic React
+Mantine UI v9
 +
 TanStack Query
 +
@@ -336,21 +336,11 @@ SSE
 Web Push
 ```
 
-MVP 阶段直接做 mobile-only PWA，不考虑 desktop 端兼容。
-
-原因：
-
-- Adjuva 的核心使用场景是 non-desktop async workflow
-- 用户不应该为了回复 agent、查看状态或处理 approval 被迫坐回 desktop
-- mobile-only 可以显著减少 MVP 阶段的 layout、responsive 和 testing 工作量
-- desktop 兼容会自然引入 split pane、multi-column layout、keyboard workflow 等额外复杂度
-- 当前最重要的是验证 Project / Conversation / Mailbox 的核心使用频率和留存
-
 Frontend 不使用后端 template engine。
 
 原因：
 
-- 前端需要成熟的 mobile UI、PWA、SSE、Web Push 和 client-side state 管理能力
+- 前端需要成熟的 app shell、responsive layout、PWA、SSE、Web Push 和 client-side state 管理能力
 - 后端应保持 API-first，专注 control plane、executor orchestration 和 persistence
 - 前后端可以独立迭代，避免把 Spring MVC template 作为长期 UI 基础
 
@@ -358,84 +348,25 @@ Frontend 不使用后端 template engine。
 
 原因：
 
-- MVP 是小型工具，过早引入 TS 类型建模和抽象会增加启动成本
+- MVP 是小型工具，过早引入 TypeScript 类型建模和抽象会增加启动成本
 - 业务模型仍在快速变化，JavaScript 更利于快速调整
 - 通过清晰 API contract、集中 data access layer 和 focused tests 控制风险
 
-Ionic React 是 MVP 的 UI 组件和 app shell 基础。
+Mantine UI v9 是 MVP 的 UI 组件和 app shell 基础。
 
-选择原因：
+原因：
 
-- Ionic 是 mobile-first UI toolkit
-- 默认组件覆盖 mobile app 常见交互：list、item、tabs、modal、toast、badge、searchbar、refresher、loading 等
+- Mantine 是成熟的 React component library，覆盖 layout、form、navigation、overlay、feedback、data display 等常用 UI primitives
+- Mantine v9 支持 Vite + React 的直接集成，并通过 `MantineProvider`、theme 和 color scheme 管理应用级 UI 基础
+- Mantine 的 responsive primitives 和 component props 更适合同时构建 desktop 与 mobile 页面
 - 不需要从 unstyled primitives 自己设计视觉系统
-- 与 React 和 Vite 生态兼容
-- 审美不出挑，但默认质量足够稳定，适合快速上线
-
-MVP 信息架构不做三层嵌套。
-
-不要做：
-
-```text
-Projects
-↓
-Conversations
-↓
-Mailbox
-```
-
-第一层应直接把 Project 和 Conversation 一起展示，类似 inbox-style grouped list：
-
-```text
-Projects
-
-ductor
-  梳理项目目的与优缺点      12h
-
-adjuva
-  Update core positioning...  7m
-  交互模型 POC               5h
-  理解 Adjuva 核心目标        1d
-
-pigeon-pod-saas
-  我发现移动端的首页有...     4d
-  阅读 documents/design...    4d
-  Show more
-```
-
-点击 Conversation 后进入 Mailbox detail。
-
-这个模型的好处：
-
-- Project 数量不会太多，不需要单独一级 Project list
-- 用户最高频动作是回到最近活跃 Conversation
-- 减少 mobile navigation depth
-- 更接近实际使用中的 inbox mental model
-- 可以自然突出 `waiting_for_user`、unread、failed、running 等状态
-
-MVP 主界面只聚焦：
-
-- Project grouped conversation list
-- Conversation mailbox detail
-- compose / reply
-- waiting-for-user 状态
-- run status
-- basic notification permission onboarding
-
-以下功能延后：
-
-- project registry UI
-- environment configuration UI
-- executor/provider configuration UI
-- decision policy editor
-- artifact browser
-- admin console
-- desktop layout
+- 默认视觉质量稳定，可在 MVP 阶段减少 design system 成本
+- 与 TanStack Query、SSE、Web Push 等前端 infrastructure 没有架构冲突
 
 Realtime 更新策略：
 
-- app foreground 使用 SSE 接收 Conversation / Mailbox / Run 状态变化
-- app background 使用 Web Push 提醒重要事件
+- desktop 和 mobile app foreground 都使用 SSE 接收 Conversation / Mailbox / Run 状态变化
+- desktop 和 mobile app background / outside-app 都使用 Web Push 提醒重要事件
 - Web Push 只用于关键事件，不用于同步完整状态
 - 重新打开 app 后以 API fetch 为 source of truth
 
@@ -448,17 +379,6 @@ Realtime 更新策略：
 
 Approval 相关提醒在 MVP 中不单独引入新的 Conversation status。若需要提醒用户确认业务决策，应先通过 `waiting_for_user` status 和 mailbox message type 表达。
 
-Web Push 在 MVP 中作为 PWA 能力处理，不引入额外平台规划和设备能力抽象。
+Web Push 在 MVP 中作为 web app / PWA 能力处理，不引入额外 native app 平台规划和设备能力抽象。
 
-实现原则：
-
-- mobile viewport first
-- single-column interaction first
-- touch target first
-- low navigation depth
-- Ionic default light/dark mode follows system preference
-- server state via TanStack Query
-- local UI state kept minimal
-- no desktop-specific optimization during MVP
-
-后续只有在 mobile PWA 核心体验验证后，再讨论 desktop layout。
+MVP frontend 的功能边界、信息架构、layout 和 agent 开发原则，单独记录在 [Adjuva MVP Frontend Development Guide.md](Adjuva%20MVP%20Frontend%20Development%20Guide.md)。

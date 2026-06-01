@@ -3,6 +3,7 @@ package com.adjuva.backend.controller;
 import com.adjuva.backend.model.entity.Conversation;
 import com.adjuva.backend.model.response.ConversationDetail;
 import com.adjuva.backend.model.response.ConversationMessageResult;
+import com.adjuva.backend.model.response.ConversationSummary;
 import com.adjuva.backend.model.request.CreateConversationRequest;
 import com.adjuva.backend.model.request.CreateMailboxMessageRequest;
 import com.adjuva.backend.model.entity.MailboxMessage;
@@ -47,6 +48,11 @@ public class ConversationController {
     @GetMapping("/projects/{projectId}/conversations")
     public List<Conversation> listConversations(@PathVariable String projectId) {
         return conversationService.listByProject(projectId);
+    }
+
+    @GetMapping("/conversations")
+    public List<ConversationSummary> listConversationSummaries() {
+        return conversationService.listSummaries();
     }
 
     @PostMapping("/projects/{projectId}/conversations")

@@ -6,6 +6,7 @@ import com.adjuva.backend.mapper.ConversationMapper;
 import com.adjuva.backend.model.entity.Conversation;
 import com.adjuva.backend.model.response.ConversationDetail;
 import com.adjuva.backend.model.response.ConversationMessageResult;
+import com.adjuva.backend.model.response.ConversationSummary;
 import com.adjuva.backend.model.request.CreateConversationRequest;
 import com.adjuva.backend.model.entity.MailboxMessage;
 import com.adjuva.backend.mapper.MailboxMessageMapper;
@@ -65,6 +66,10 @@ public class ConversationService {
     public List<Conversation> listByProject(String projectId) {
         projectService.getActive(projectId);
         return conversationMapper.selectByProject(projectId);
+    }
+
+    public List<ConversationSummary> listSummaries() {
+        return conversationMapper.selectSummaries();
     }
 
     public ConversationDetail detail(String conversationId) {
