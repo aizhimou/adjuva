@@ -4,7 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "adjuva")
 public class ExecutorProperties {
-    private String apiBaseUrl = "http://localhost:8080";
+    private String apiBaseUrl = "http://localhost:9090";
     private final Codex codex = new Codex();
     private final Mock mock = new Mock();
 

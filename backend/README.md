@@ -29,7 +29,7 @@ The default datasource uses an H2 file database at `./data/adjuva`.
 The supported API surface is versioned under `/api/v1`.
 
 ```bash
-curl -s http://localhost:8080/api/v1/projects
+curl -s http://localhost:9090/api/v1/projects
 ```
 
 Core resources:
@@ -63,7 +63,7 @@ Useful local config:
 
 ```yaml
 adjuva:
-  api-base-url: http://localhost:8080
+  api-base-url: http://localhost:9090
   executor:
     enabled: true
   codex:
@@ -84,7 +84,7 @@ java -jar target/adjuva-backend-0.1.0-SNAPSHOT.jar \
 Create a mock project, conversation, and user message:
 
 ```bash
-curl -s -X POST http://localhost:8080/api/v1/projects \
+curl -s -X POST http://localhost:9090/api/v1/projects \
   -H 'content-type: application/json' \
   -d '{"name":"Smoke","provider":"mock","model":"mock-agent","workspaceRoot":"./target/adjuva-workspaces"}'
 ```

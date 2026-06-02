@@ -32,7 +32,7 @@ db-scheduler:
 
 
 adjuva:
-  api-base-url: http://localhost:8080
+  api-base-url: http://localhost:9090
   executor:
     enabled: true
   codex:
